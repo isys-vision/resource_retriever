@@ -11,6 +11,13 @@ def test_get_by_package():
     assert len(res) == 1
     assert res == 'A'.encode()
 
+def test_get_package_with_space():
+    res_path = os.path.join(rospack.get_path("resource_retriever"), "test/test file.txt")
+    with open(res_path, 'w') as f:
+        f.write('A')
+    res = r.get("package://resource_retriever/test/test file.txt")
+    assert res == 'A'.encode()
+
 def test_get_large_file():
     res_path = os.path.join(rospack.get_path("resource_retriever"), "test/large_filepy.dat")
     with open(res_path, 'w') as f:

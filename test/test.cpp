@@ -56,6 +56,31 @@ TEST(Retriever, getByPackage)
   }
 }
 
+TEST(Retriever, spaceUrl)
+{
+  try
+  {
+    std::string path = ros::package::getPath(ROS_PACKAGE_NAME) + "/test/test file.txt";
+
+    FILE* f = fopen(path.c_str(), "w");
+
+    ASSERT_TRUE(f);
+
+    fprintf(f, "A");
+    fclose(f);
+
+    Retriever r;
+    MemoryResource res = r.get("package://" ROS_PACKAGE_NAME "/test/test file.txt");
+
+    ASSERT_EQ(res.size, 1);
+    ASSERT_EQ(res.data[0], 'A');
+  }
+  catch (Exception& e)
+  {
+    FAIL();
+  }
+}
+
 TEST(Retriever, largeFile)
 {
   try
